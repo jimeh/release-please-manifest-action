@@ -1,0 +1,187 @@
+---
+name: release-please-manifest
+on:
+  workflow_call:
+    #
+    # Secrets
+    #
+    secrets:
+      token:
+        description: GitHub token used to authenticate.
+        required: false
+      app-id:
+        description: >-
+          ID of the GitHub App to use for authentication. If set, takes
+          precedence over token input.
+        required: false
+      private-key:
+        description: >-
+          Private key of the GitHub App (can be Base64 encoded). Required when
+          app-id is provided.
+        required: false
+    #
+    # Inputs
+    #
+    inputs:
+      runs_on:
+        description: "GitHub Actions runs-on value for release please job."
+        default: "ubuntu-latest"
+        type: string
+        required: false
+      installation-id:
+        description: >-
+          ID of the installation for which the app token will be requested.
+          Defaults to the ID of the repository's installation.
+        type: string
+      permissions:
+        description: >-
+          JSON-stringified permissions granted to the app token. Defaults to all
+          the GitHub app permissions, see:
+          https://docs.github.com/en/rest/apps/apps#create-an-installation-access-token-for-an-app
+        type: string
+      github-api-url:
+        description: Configure github API URL.
+        type: string
+        required: false
+        default: ${{ github.api_url }}
+      repository:
+        description: >-
+          The full name of the repository to operate on in owner/repo format.
+          Defaults to the current repository.
+        type: string
+        default: ${{ github.repository }}
+      default-branch:
+        description: >-
+          Branch to open pull release PR against. Defaults to the repository's
+          default branch.
+        type: string
+        required: false
+        default: ""
+      config-file:
+        description: Pat to config file within the project.
+        type: string
+        required: false
+        default: ".github/release-please-config.json"
+      manifest-file:
+        description: Path to manifest file within the project.
+        type: string
+        required: false
+        default: ".github/.release-please-manifest.json"
+    #
+    # Outputs
+    #
+    outputs:
+      release_created:
+        description: "Whether or not a release was created."
+        value: ${{ jobs.release-please-manifest.outputs.release_created }}
+      releases_created:
+        description: "Whether or not a release was created."
+        value: ${{ jobs.release-please-manifest.outputs.releases_created }}
+      id:
+        description: "Release ID."
+        value: ${{ jobs.release-please-manifest.outputs.id }}
+      name:
+        description: "Release name."
+        value: ${{ jobs.release-please-manifest.outputs.name }}
+      tag_name:
+        description: "Release tag name."
+        value: ${{ jobs.release-please-manifest.outputs.tag_name }}
+      sha:
+        description: "Release sha"
+        value: ${{ jobs.release-please-manifest.outputs.sha }}
+      body:
+        description: "Release body."
+        value: ${{ jobs.release-please-manifest.outputs.body }}
+      html_url:
+        description: "Release URL."
+        value: ${{ jobs.release-please-manifest.outputs.html_url }}
+      draft:
+        description: "Whether or not the release is a draft."
+        value: ${{ jobs.release-please-manifest.outputs.draft }}
+      upload_url:
+        description: "Release upload URL."
+        value: ${{ jobs.release-please-manifest.outputs.upload_url }}
+      path:
+        description: "Path that was released."
+        value: ${{ jobs.release-please-manifest.outputs.path }}
+      version:
+        description: "Version that was released."
+        value: ${{ jobs.release-please-manifest.outputs.version }}
+      major:
+        description: "Major version that was released."
+        value: ${{ jobs.release-please-manifest.outputs.major }}
+      minor:
+        description: "Minor version that was released."
+        value: ${{ jobs.release-please-manifest.outputs.minor }}
+      patch:
+        description: "Patch version that was released."
+        value: ${{ jobs.release-please-manifest.outputs.patch }}
+      paths_released:
+        description: "Paths that were released."
+        value: ${{ jobs.release-please-manifest.outputs.paths_released }}
+      pr:
+        description: "Pull request number."
+        value: ${{ jobs.release-please-manifest.outputs.pr }}
+      prs:
+        description: "Pull request numbers."
+        value: ${{ jobs.release-please-manifest.outputs.prs }}
+      release-please:
+        description: "All outputs from release-please action as a JSON string."
+        value: ${{ jobs.release-please-manifest.outputs.release-please }}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please-manifest:
+    runs-on: ${{ inputs.runs_on }}
+    if: >-
+      github.ref == 'refs/heads/main' ||
+      github.ref == 'refs/heads/master' ||
+      (
+        inputs.default-branch != '' &&
+        github.ref == format('refs/heads/{0}', inputs.default-branch)
+      )
+    outputs:
+      release_created: ${{ steps.release-please.outputs.release_created }}
+      releases_created: ${{ steps.release-please.outputs.releases_created }}
+      id: ${{ steps.release-please.outputs.id }}
+      name: ${{ steps.release-please.outputs.name }}
+      tag_name: ${{ steps.release-please.outputs.tag_name }}
+      sha: ${{ steps.release-please.outputs.sha }}
+      body: ${{ steps.release-please.outputs.body }}
+      html_url: ${{ steps.release-please.outputs.html_url }}
+      draft: ${{ steps.release-please.outputs.draft }}
+      upload_url: ${{ steps.release-please.outputs.upload_url }}
+      path: ${{ steps.release-please.outputs.path }}
+      version: ${{ steps.release-please.outputs.version }}
+      major: ${{ steps.release-please.outputs.major }}
+      minor: ${{ steps.release-please.outputs.minor }}
+      patch: ${{ steps.release-please.outputs.patch }}
+      paths_released: ${{ steps.release-please.outputs.paths_released }}
+      pr: ${{ steps.release-please.outputs.pr }}
+      prs: ${{ steps.release-please.outputs.prs }}
+      release-please: ${{ toJSON(steps.release-please.outputs) }}
+    steps:
+      - name: Determine which token to use
+        id: token
+        run: |-
+          echo "token=${GIVEN_TOKEN:-$GITHUB_TOKEN}" >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_TOKEN: "${{ github.token }}"
+          GIVEN_TOKEN: "${{ secrets.token }}"
+        shell: bash
+      - uses: jimeh/release-please-manifest-action@v1
+        id: release-please
+        with:
+          token: ${{ steps.token.outputs.token }}
+          app-id: ${{ secrets.app-id }}
+          private-key: ${{ secrets.private-key }}
+          installation-id: ${{ inputs.installation-id }}
+          permissions: ${{ inputs.permissions }}
+          github-api-url: ${{ inputs.github-api-url }}
+          repository: ${{ inputs.repository }}
+          default-branch: ${{ inputs.default-branch }}
+          config-file: ${{ inputs.config-file }}
+          manifest-file: ${{ inputs.manifest-file }}
