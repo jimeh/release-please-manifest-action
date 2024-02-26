@@ -4,12 +4,11 @@ description: >-
   Opinionated action for running release-please in manifest mode with optional
   support to authenticate as a GitHub App.
 author: "jimeh"
-
 inputs:
   token:
     description: "GitHub token used to authenticate."
     required: false
-    default: ${{ github.token }}
+    default: "${{ github.token }}"
   app-id:
     description: >-
       ID of the GitHub App to use for authentication. If set, takes precedence
@@ -20,38 +19,53 @@ inputs:
       Private key of the GitHub App (can be Base64 encoded). Required when
       app-id is provided.
     required: false
-  installation-id:
+  installation-retrieval-mode:
     description: >-
-      ID of the installation for which the app token will be requested. Defaults
-      to the ID of the repository's installation.
+      The mode used to retrieve the installation for which the token will be
+      requested. Must be one of: id, organization, repository, or user. For
+      details see: https://github.com/tibdex/github-app-token
+    default: "repository"
+  installation-retrieval-payload:
+    description: "The payload used to retrieve the installation."
+    default: "${{ github.repository }}"
   permissions:
     description: >-
       JSON-stringified permissions granted to the app token. Defaults to all the
       GitHub app permissions, see:
       https://docs.github.com/en/rest/apps/apps#create-an-installation-access-token-for-an-app
   github-api-url:
-    description: Configure github API URL.
+    description: "Configure github API URL."
     required: false
-    default: ${{ github.api_url }}
-  repository:
-    description: >-
-      The full name of the repository to operate on in owner/repo format.
-      Defaults to the current repository.
-    default: ${{ github.repository }}
-  default-branch:
-    description: >-
-      Branch to open pull release PR against. Defaults to the repository's
-      default branch.
+    default: "${{ github.api_url }}"
+  target-branch:
+    description: "Branch to open pull release PR against (detected by default)"
     required: false
     default: ""
   config-file:
-    description: Pat to config file within the project.
+    description: "Pat to config file within the project."
     required: false
     default: ".github/release-please-config.json"
   manifest-file:
-    description: Path to manifest file within the project.
+    description: "Path to manifest file within the project."
     required: false
     default: ".github/.release-please-manifest.json"
+  path:
+    description: >-
+      Create a release from a path other than the repository's root.
+    required: false
+    default: ""
+  fork:
+    description: >-
+      If true, send the PR from a fork. This requires the token to be a user
+      that can create forks (e.g. not the default GITHUB_TOKEN)
+    required: false
+    default: "false"
+  proxy-server:
+    description: >-
+      Set proxy sever when you run this action behind a proxy. Format is
+      host:port e.g. proxy-host.com:8080
+    required: false
+    default: ""
 
 outputs:
   release_created:
@@ -115,16 +129,16 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: tibdex/github-app-token@v1
+    - uses: tibdex/github-app-token@v2
       if: inputs.app-id != null && inputs.app-id != ''
       id: github-app-token
       with:
         app_id: ${{ inputs.app-id }}
-        installation_id: ${{ inputs.installation-id }}
+        installation_retrieval_mode: ${{ inputs.installation-retrieval-mode }}
+        installation_retrieval_payload: ${{ inputs.installation-retrieval-payload }}
         github_api_url: ${{ inputs.github-api-url }}
         permissions: ${{ inputs.permissions }}
         private_key: ${{ inputs.private-key }}
-        repository: ${{ github.repository }}
     - name: resolve token
       id: token
       run: |-
@@ -133,14 +147,16 @@ runs:
         APP_TOKEN: "${{ steps.github-app-token.outputs.token }}"
         INPUT_TOKEN: "${{ inputs.token }}"
       shell: bash
-    - uses: google-github-actions/release-please-action@v3
+    - uses: google-github-actions/release-please-action@v4
       id: release-please
       with:
-        command: manifest
         token: ${{ steps.token.outputs.token }}
-        default-branch: ${{ inputs.default-branch }}
+        target-branch: ${{ inputs.target-branch }}
+        path: ${{ inputs.path }}
         config-file: ${{ inputs.config-file }}
         manifest-file: ${{ inputs.manifest-file }}
         github-api-url: ${{ inputs.github-api-url }}
         github-graphql-url: ${{ inputs.github-api-url }}
         repo-url: ${{ inputs.repository }}
+        fork: ${{ inputs.fork }}
+        proxy-server: ${{ inputs.proxy-server }}
