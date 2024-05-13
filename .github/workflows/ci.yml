@@ -19,8 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      # TOOD: Switch back to @v1 once once v1.0.3 is released.
-      - uses: jimeh/release-please-manifest-action@main
+      - uses: jimeh/release-please-manifest-action@v1
         id: release
         with:
           app-id: ${{ secrets.RELEASE_BOT_APP_ID }}
