@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.0](https://github.com/jimeh/release-please-manifest-action/compare/v1.0.3...v2.0.0) (2025-03-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **input:** rename `default-branch` input to `target-branch`
+* **input:** replaced `installation-id` input with `installation-retrieval-mode`
+* **output:** rename `release-please` output to `raw`
+
+### Features
+
+* **deps:** upgrade release-please-action and github-app-token to latest major versions ([4a3aba9](https://github.com/jimeh/release-please-manifest-action/commit/4a3aba93da18573def6f5583082327e81c38c6d4))
+* **input:** rename `default-branch` input to `target-branch` ([4a3aba9](https://github.com/jimeh/release-please-manifest-action/commit/4a3aba93da18573def6f5583082327e81c38c6d4))
+* **input:** replaced `installation-id` input with `installation-retrieval-mode` ([4a3aba9](https://github.com/jimeh/release-please-manifest-action/commit/4a3aba93da18573def6f5583082327e81c38c6d4))
+* **output:** rename `release-please` output to `raw` ([4a3aba9](https://github.com/jimeh/release-please-manifest-action/commit/4a3aba93da18573def6f5583082327e81c38c6d4))
+
 ## [1.0.3](https://github.com/jimeh/release-please-manifest-action/compare/v1.0.2...v1.0.3) (2024-05-13)
 
 
