@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: jimeh/release-please-manifest-action@bfd8923580a274363ff9fbaf6d07484fbc8d9c6e # v2.0.0
+      - uses: jimeh/release-please-manifest-action@84f33fd2828210488c36f3e0a7e3209252d2ae7d # v3.0.0
         id: release
         with:
           app-id: ${{ secrets.RELEASE_BOT_APP_ID }}
