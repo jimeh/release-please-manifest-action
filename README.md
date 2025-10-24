@@ -9,8 +9,8 @@
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/jimeh/release-please-manifest-action.svg?style=flat&logo=github&logoColor=white)](https://github.com/jimeh/release-please-manifest-action/pulls)
 [![License](https://img.shields.io/github/license/jimeh/release-please-manifest-action.svg)](https://github.com/jimeh/release-please-manifest-action/blob/main/LICENSE)
 
-A composite action which wraps [release-please-action][] and
-[create-github-app-token][] actions, with opinionated defaults.
+An opinionated composite action that wraps [release-please-action][] and
+[create-github-app-token][].
 
 </div>
 
