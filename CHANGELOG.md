@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/jimeh/release-please-manifest-action/compare/v2.0.0...v3.0.0) (2025-10-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** Removed various app token related inputs not available  in new underlying action. Please see updated list of inputs in README.
+
+### Features
+
+* **deps:** migrate to actions/create-github-app-token ([#22](https://github.com/jimeh/release-please-manifest-action/issues/22)) ([d822d97](https://github.com/jimeh/release-please-manifest-action/commit/d822d979e98542a92c39e3c8f9045ff3d47cdc26))
+
 ## [2.0.0](https://github.com/jimeh/release-please-manifest-action/compare/v1.0.3...v2.0.0) (2025-03-07)
 
 
