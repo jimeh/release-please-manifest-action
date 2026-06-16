@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://github.com/jimeh/release-please-manifest-action/compare/v3.0.0...v4.0.0) (2026-06-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** the wrapped `actions/create-github-app-token` and `googleapis/release-please-action` dependencies are upgraded to new major versions that run on Node 24 and require compatible GitHub Actions runners. The GitHub App identifier input is now `client-id`; `app-id` remains accepted for compatibility but is deprecated.
+
+### Miscellaneous Chores
+
+* **deps:** update action dependency tooling ([#26](https://github.com/jimeh/release-please-manifest-action/issues/26)) ([d86493e](https://github.com/jimeh/release-please-manifest-action/commit/d86493eb9338ba5c6cbcc7d4cf9f27226b67f152))
+
 ## [3.0.0](https://github.com/jimeh/release-please-manifest-action/compare/v2.0.0...v3.0.0) (2025-10-24)
 
 
