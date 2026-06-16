@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: jimeh/release-please-manifest-action@v3
+      - uses: jimeh/release-please-manifest-action@v4
 ```
 
 <!-- x-release-please-end -->
@@ -108,7 +108,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: jimeh/release-please-manifest-action@v3
+      - uses: jimeh/release-please-manifest-action@v4
         with:
           token: ${{ secrets.RELEASE_PAT_TOKEN }}
 ```
@@ -166,7 +166,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: jimeh/release-please-manifest-action@v3
+      - uses: jimeh/release-please-manifest-action@v4
         with:
           client-id: ${{ secrets.RELEASE_BOT_CLIENT_ID }}
           private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
