@@ -8,6 +8,8 @@ strict = true
 [tools]
 actionlint = "1.7.12"
 bun = "1.3.14"
+pinact = "4.1.0"
+zizmor = "1.25.2"
 "npm:action-docs" = "2.5.1"
 "npm:prettier" = "3.8.4"
 
@@ -27,6 +29,14 @@ depends = ["readme"]
 [tasks.lint]
 description = "Lint GitHub Actions workflows"
 run = "actionlint .github/workflows/*.yml"
+
+[tasks.pinact]
+description = "Check GitHub Actions references are pinned"
+run = "pinact run --fix=false --verify-comment"
+
+[tasks.zizmor]
+description = "Run GitHub Actions security analysis"
+run = "zizmor --offline ."
 
 [tasks.check]
 description = "Run repository validation"
