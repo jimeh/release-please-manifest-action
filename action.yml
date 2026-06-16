@@ -158,7 +158,7 @@ runs:
         echo "✔ Private key format detected and securely passed to create-github-app-token action..."
       env:
         INPUT_PRIVATE_KEY: "${{ inputs.private-key }}"
-    - uses: actions/create-github-app-token@v2
+    - uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
       if: >-
         steps.preflight.outputs.run == 'true' &&
         inputs.app-id != null &&
@@ -167,6 +167,9 @@ runs:
       with:
         app-id: ${{ inputs.app-id }}
         private-key: ${{ steps.resolve-private-key.outputs.private-key }}
+        permission-contents: write
+        permission-issues: write
+        permission-pull-requests: write
     - name: resolve token
       if: steps.preflight.outputs.run == 'true'
       id: token
@@ -176,7 +179,7 @@ runs:
       env:
         APP_TOKEN: "${{ steps.github-app-token.outputs.token }}"
         INPUT_TOKEN: "${{ inputs.token }}"
-    - uses: googleapis/release-please-action@v4
+    - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
       if: steps.preflight.outputs.run == 'true'
       id: release-please
       with:
