@@ -13,7 +13,7 @@ inputs:
       Client ID of the GitHub App to use for authentication. If set, takes
       precedence over app-id and token inputs.
   app-id:
-    deprecationMessage: "Use 'client-id' instead."
+    deprecationMessage: "Use 'client-id' instead of 'app-id'."
     description: >-
       ID of the GitHub App to use for authentication. Deprecated in favor of
       client-id. Used only when client-id is not set.
