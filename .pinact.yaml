@@ -5,4 +5,6 @@ min_age:
   always: true
 files:
   - pattern: .github/workflows/*.yml
+  - pattern: .github/workflows/*.yaml
   - pattern: action.yml
+  - pattern: action.yaml

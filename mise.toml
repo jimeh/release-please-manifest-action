@@ -41,7 +41,7 @@ depends = ["actionlint", "pinact", "zizmor"]
 
 [tasks.actionlint]
 description = "Lint GitHub Actions workflows"
-run = "actionlint .github/workflows/*.yml"
+run = "actionlint"
 
 [tasks.pinact]
 description = "Check GitHub Actions references are pinned"
